@@ -26,7 +26,7 @@ return {
         config = function()
             vim.cmd([[colorscheme tokyonight]])
         end,
-    },
+   },
 
     -- Treesitter
     {
@@ -112,34 +112,22 @@ return {
             -- Bridges mason <-> lspconfig
             { "williamboman/mason-lspconfig.nvim" },
 
-            -- Completion engine
             { "hrsh7th/nvim-cmp" },
             { "hrsh7th/cmp-nvim-lsp" },
             { "hrsh7th/cmp-buffer" },
             { "hrsh7th/cmp-path" },
             { "hrsh7th/cmp-nvim-lua" },
-
-            -- Snippet engine
-            { "L3MON4D3/LuaSnip" },
-            { "saadparwaiz1/cmp_luasnip" },
         },
 
         config = function()
-            ---------------------------------------------------------------------
             -- Mason: installs LSP servers (does NOT start them)
-            ---------------------------------------------------------------------
             require("mason").setup({})
 
-            ---------------------------------------------------------------------
             -- Capabilities: tells LSP servers that nvim-cmp exists
-            -- CRITICAL for completion to work
             ---------------------------------------------------------------------
             local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-            ---------------------------------------------------------------------
             -- on_attach: runs when an LSP attaches to a buffer
-            -- All keymaps + formatting go here
-            ---------------------------------------------------------------------
             local on_attach = function(client, bufnr)
                 local opts = { buffer = bufnr, remap = false }
                 local map = vim.keymap.set
@@ -157,7 +145,7 @@ return {
                 map("n", "<leader>sd", vim.diagnostic.open_float, opts)
 
                 -- Refactor
-                map("n", "<leader>rn", vim.lsp.buf.rename, opts)
+               map("n", "<leader>rn", vim.lsp.buf.rename, opts)
                 map("n", "<leader>ca", vim.lsp.buf.code_action, opts)
 
                 -- Auto-format on save (only if server supports it)
@@ -170,14 +158,10 @@ return {
                     })
                 end
             end
-
-            ---------------------------------------------------------------------
             -- nvim-cmp setup (completion)
-            -- Your original logic preserved
-            ---------------------------------------------------------------------
             local cmp = require("cmp")
 
-            cmp.setup({
+           cmp.setup({
                 mapping = {
                     ["<Tab>"] = cmp.mapping(function(fallback)
                         if cmp.visible() then
@@ -206,10 +190,7 @@ return {
                 },
             })
 
-            ---------------------------------------------------------------------
             -- Auto-setup ALL installed LSP servers
-            -- This REPLACES lsp-zero's magic
-            ---------------------------------------------------------------------
             local lspconfig = require("lspconfig")
 
             require("mason-lspconfig").setup({
@@ -217,7 +198,6 @@ return {
                     "pyright",
                     "html",
                     "vtsls",
-                    "lua_ls",
                 },
                 automatic_enable = true,
                 handlers = {
@@ -228,6 +208,7 @@ return {
                             capabilities = capabilities,
                         })
                     end,
+
                 },
             })
         end,
