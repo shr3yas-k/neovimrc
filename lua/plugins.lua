@@ -208,12 +208,19 @@ return {
                     end,
                 },
             })
-            --     lspconfig.lua_ls.setup({
-            --         --This allows lua-language-server to attach if ':LspStart lua_ls' is called.
-            --         cmd = { "lua-language-server" },
-            --         on_attach = on_attach,
-            --         capabilities = capabilities,
-            --     })
+
+            lspconfig.lua_ls.setup({
+                --This allows lua-language-server to attach if ':LspStart lua_ls' is called.
+                cmd = { "lua-language-server" },
+                on_attach = on_attach,
+                capabilities = capabilities,
+            })
+
+            lspconfig.clangd.setup({
+                cmd = { "clangd" },
+                on_attach = on_attach,
+                capabilities = capabilities,
+            })
         end,
     },
     {
