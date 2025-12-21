@@ -124,7 +124,6 @@ return {
             require("mason").setup({})
 
             -- Capabilities: tells LSP servers that nvim-cmp exists
-            ---------------------------------------------------------------------
             local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
             -- on_attach: runs when an LSP attaches to a buffer
@@ -190,7 +189,6 @@ return {
                 },
             })
 
-            -- Auto-setup ALL installed LSP servers
             local lspconfig = require("lspconfig")
 
             require("mason-lspconfig").setup({
@@ -208,8 +206,13 @@ return {
                             capabilities = capabilities,
                         })
                     end,
-
                 },
+            })
+            require("lspconfig").lua_ls.setup({
+            --This allows lua-language-server to attach if ':LspStart lua_ls' is called.
+                cmd = { "lua-language-server" },
+                on_attach = on_attach,
+                capabilities = capabilities,
             })
         end,
     },
