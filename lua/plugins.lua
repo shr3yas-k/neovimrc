@@ -26,7 +26,7 @@ return {
         config = function()
             vim.cmd([[colorscheme tokyonight]])
         end,
-   },
+    },
 
     -- Treesitter
     {
@@ -144,7 +144,7 @@ return {
                 map("n", "<leader>sd", vim.diagnostic.open_float, opts)
 
                 -- Refactor
-               map("n", "<leader>rn", vim.lsp.buf.rename, opts)
+                map("n", "<leader>rn", vim.lsp.buf.rename, opts)
                 map("n", "<leader>ca", vim.lsp.buf.code_action, opts)
 
                 -- Auto-format on save (only if server supports it)
@@ -160,7 +160,7 @@ return {
             -- nvim-cmp setup (completion)
             local cmp = require("cmp")
 
-           cmp.setup({
+            cmp.setup({
                 mapping = {
                     ["<Tab>"] = cmp.mapping(function(fallback)
                         if cmp.visible() then
@@ -208,12 +208,12 @@ return {
                     end,
                 },
             })
-            require("lspconfig").lua_ls.setup({
-            --This allows lua-language-server to attach if ':LspStart lua_ls' is called.
-                cmd = { "lua-language-server" },
-                on_attach = on_attach,
-                capabilities = capabilities,
-            })
+            --     lspconfig.lua_ls.setup({
+            --         --This allows lua-language-server to attach if ':LspStart lua_ls' is called.
+            --         cmd = { "lua-language-server" },
+            --         on_attach = on_attach,
+            --         capabilities = capabilities,
+            --     })
         end,
     },
     {
