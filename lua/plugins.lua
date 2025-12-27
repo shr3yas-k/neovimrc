@@ -198,15 +198,24 @@ return {
                     "vtsls",
                 },
                 automatic_enable = true,
-                handlers = {
+                -- handlers = {
+                --
+                --     function(server)
+                --         lspconfig[server].setup({
+                --             on_attach = on_attach,
+                --             capabilities = capabilities,
+                --         })
+                --     end,
+                -- },
+            })
 
-                    function(server)
-                        lspconfig[server].setup({
-                            on_attach = on_attach,
-                            capabilities = capabilities,
-                        })
-                    end,
-                },
+            lspconfig.pyright.setup({
+                on_attach = on_attach,
+                capabilities = capabilities,
+            })
+            lspconfig.vtsls.setup({
+                on_attach = on_attach,
+                capabilities = capabilities,
             })
 
             lspconfig.lua_ls.setup({
