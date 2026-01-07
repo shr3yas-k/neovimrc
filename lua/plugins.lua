@@ -33,15 +33,16 @@ return {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
         event = "BufRead",
-        config = function()
-            require("nvim-treesitter.configs").setup({
-                highlight = { enable = true },
-                ensure_installed = { "vimdoc", "lua", "python", "cpp", "javascript", "html", "css", "c" },
-                indent = { enable = true },
-                auto_install = true,
-                additional_vim_regex_highlighting = false,
-            })
-        end,
+        opts = {
+            highlight = { enable = true },
+            ensure_installed = {
+                "vimdoc", "lua", "python", "cpp",
+                "javascript", "html", "css", "c"
+            },
+            indent = { enable = true },
+            auto_install = true,
+            additional_vim_regex_highlighting = false,
+        },
     },
 
     -- Telescope
@@ -54,7 +55,7 @@ return {
             vim.keymap.set("n", "<leader>pf", builtin.find_files)
             vim.keymap.set("n", "<leader>gf", builtin.git_files)
             vim.keymap.set("n", "<leader>ps", function()
-                builtin.grep_string({ search = vim.fn.input("Grep > ") })
+                require("telescope.builtin").live_grep()
             end)
         end,
     },
@@ -197,7 +198,6 @@ return {
                     "html",
                     "vtsls",
                 },
-                automatic_enable = true,
                 -- handlers = {
                 --
                 --     function(server)
@@ -234,7 +234,7 @@ return {
     },
     {
         "numToStr/Comment.nvim",
-        opts = {} -- this calls setup with default options
+        opts = {}
     },
 
     {
@@ -258,4 +258,27 @@ return {
             })
         end,
     },
-}
+    {
+        "folke/noice.nvim",
+        event = "VeryLazy",
+        dependencies = {
+            "MunifTanjim/nui.nvim",
+            "rcarriga/nvim-notify",
+        },
+        opts = {
+            lsp = {
+                override = {
+                    ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+                    ["vim.lsp.util.stylize_markdown"] = true,
+                    ["cmp.entry.get_documentation"] = true,
+                },
+            },
+            presets = {
+                bottom_search = true,
+                command_palette = true,
+                long_message_to_split = true,
+                inc_rename = false,
+                lsp_doc_border = false,
+            },
+        },
+    }, }
