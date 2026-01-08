@@ -18,31 +18,67 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 return {
-    -- Theme
+    --Theme
     {
-        "folke/tokyonight.nvim",
-        lazy = false,
-        priority = 1000,
-        config = function()
-            vim.cmd([[colorscheme tokyonight]])
-        end,
-    },
+        "tiagovla/tokyodark.nvim",
+        opts = {
+            custom_palette = function(palette)
+                local local_red = palette.red
 
-    -- Treesitter
+                return {
+                    orange = palette.fg,
+                    red    = palette.purple,
+                    purple = local_red,
+                    yellow = palette.cyan,
+                    green  = palette.blue,
+                }
+            end,
+
+            custom_highlights = function(_, palette)
+                return {
+                    -- variables
+                    ["@variable"] = { fg = palette.fg },
+                    ["@parameter"] = { fg = palette.fg },
+                    ["@lsp.type.variable"] = { fg = palette.fg },
+
+                    -- builtins
+                    ["@variable.builtin"] = { fg = palette.blue },
+                    ["@lsp.type.parameter"] = { fg = palette.cyan },
+
+                    -- punctuation
+                    ["@punctuation.delimiter"] = { fg = palette.bg4 },
+                    ["@punctuation.bracket"] = { fg = palette.bg4 },
+                    ["@punctuation.special"] = { fg = palette.blue },
+
+                    ["@operator"] = { fg = palette.bg4 }
+                }
+            end,
+        },
+        config = function(_, opts)
+            require("tokyodark").setup(opts)
+            vim.cmd.colorscheme("tokyodark")
+        end,
+    }
+    ,
+    --Treesitter
     {
         "nvim-treesitter/nvim-treesitter",
+        lazy = false,
         build = ":TSUpdate",
-        event = "BufRead",
-        opts = {
-            highlight = { enable = true },
-            ensure_installed = {
-                "vimdoc", "lua", "python", "cpp",
-                "javascript", "html", "css", "c"
-            },
-            indent = { enable = true },
-            auto_install = true,
-            additional_vim_regex_highlighting = false,
-        },
+        config = function()
+            require("nvim-treesitter.configs").setup({
+                ensure_installed = {
+                    "vimdoc", "lua", "python", "cpp",
+                    "javascript", "html", "css", "c"
+                },
+                highlight = {
+                    enable = true,
+                    additional_vim_regex_highlighting = false,
+                },
+                indent = { enable = true },
+                auto_install = true,
+            })
+        end,
     },
 
     -- Telescope
@@ -208,10 +244,17 @@ return {
                 --     end,
                 -- },
             })
-
+            local util = require("lspconfig.util")
             lspconfig.pyright.setup({
-                on_attach = on_attach,
-                capabilities = capabilities,
+                single_file_support = false,
+                root_dir = function(fname)
+                    return util.root_pattern(
+                        ".git",
+                        "pyproject.toml",
+                        "setup.py",
+                        "setup.cfg"
+                    )(fname)
+                end,
             })
             lspconfig.vtsls.setup({
                 on_attach = on_attach,
