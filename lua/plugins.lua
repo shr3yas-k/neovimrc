@@ -81,6 +81,65 @@ return {
         end,
     },
 
+    {
+        'nvim-lualine/lualine.nvim',
+        dependencies = { 'nvim-tree/nvim-web-devicons' },
+        config = function()
+            local c = {
+                bg      = "#11121d",
+                fg      = "#a0a8cd",
+                normal  = "#a485dd",
+                insert  = "#7199ee",
+                visual  = "#ee6d85",
+                replace = "#38a89d",
+                grey    = "#4a5057",
+            }
+
+            require('lualine').setup({
+                options = {
+                    globalstatus = true,
+                    section_separators = "",
+                    component_separators = "",
+                    theme = {
+                        normal = {
+                            a = { fg = c.bg, bg = c.normal, gui = "bold" },
+                            b = { fg = c.fg, bg = c.bg },
+                            c = { fg = c.fg, bg = c.bg },
+                        },
+                        insert = {
+                            a = { fg = c.bg, bg = c.insert, gui = "bold" },
+                            b = { fg = c.fg, bg = c.bg },
+                            c = { fg = c.fg, bg = c.bg },
+                        },
+                        visual = {
+                            a = { fg = c.bg, bg = c.visual, gui = "bold" },
+                            b = { fg = c.fg, bg = c.bg },
+                            c = { fg = c.fg, bg = c.bg },
+                        },
+                        replace = {
+                            a = { fg = c.bg, bg = c.replace, gui = "bold" },
+                            b = { fg = c.fg, bg = c.bg },
+                            c = { fg = c.fg, bg = c.bg },
+                        },
+                        inactive = {
+                            a = { fg = c.grey, bg = c.bg },
+                            b = { fg = c.grey, bg = c.bg },
+                            c = { fg = c.grey, bg = c.bg },
+                        },
+                    },
+                },
+                sections = {
+                    lualine_a = { "mode" },
+                    lualine_b = { "branch" },
+                    lualine_c = { "filename" },
+                    lualine_x = {},
+                    lualine_y = {},
+                    lualine_z = {},
+                },
+            })
+        end,
+    },
+
     -- Telescope
     {
         "nvim-telescope/telescope.nvim",
@@ -95,7 +154,6 @@ return {
             end)
         end,
     },
-
     -- tmux navigation
     {
         "christoomey/vim-tmux-navigator",
@@ -309,6 +367,9 @@ return {
             "rcarriga/nvim-notify",
         },
         opts = {
+            notify = {
+                timeout = 3000,
+            },
             lsp = {
                 override = {
                     ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
