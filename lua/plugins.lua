@@ -18,49 +18,79 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 return {
-    --Theme
+    -- {
+    --     "tiagovla/tokyodark.nvim",
+    --     opts = {
+    --         custom_palette = function(palette)
+    --             return {
+    --                 orange = palette.fg,
+    --                 red    = palette.bg4,
+    --                 -- red = "#565f89",
+    --                 purple = palette.purple,
+    --                 yellow = palette.fg,
+    --                 green  = palette.purple,
+    --                 -- blue = "#565f89",
+    --                 -- cyan = "#565f89",
+    --             }
+    --         end,
+    --
+    --         custom_highlights = function(_, palette)
+    --             local neon_purple = "#b57cff"
+    --
+    --             return {
+    --                 ["@variable"] = { fg = palette.fg },
+    --                 ["@parameter"] = { fg = palette.fg },
+    --                 ["@lsp.type.variable"] = { fg = palette.fg },
+    --
+    --                 ["@variable.builtin"] = { fg = palette.purple },
+    --                 ["@lsp.type.parameter"] = { fg = palette.purple },
+    --
+    --                 ["@punctuation.delimiter"] = { fg = palette.bg4 },
+    --                 ["@punctuation.bracket"] = { fg = palette.bg4 },
+    --                 ["@punctuation.special"] = { fg = palette.bg4 },
+    --                 ["@operator"] = { fg = palette.bg4 },
+    --                 Comment = { fg = "#565f89", italic = true },
+    --                 ["@comment"] = { fg = "#565f89", italic = true },
+    --                 LineNr = { fg = palette.bg4 },
+    --                 CursorLineNr = { fg = neon_purple, bold = true },
+    --                 CursorLine = { bg = "#211b29" },
+    --                 Visual = { bg = "#2d2438" },
+    --                 WinSeparator = { fg = palette.bg4 },
+    --
+    --                 NeoTreeNormal = { bg = "NONE", fg = palette.fg },
+    --                 NeoTreeNormalNC = { bg = "NONE", fg = palette.fg },
+    --                 NeoTreeFileName = { fg = palette.fg },
+    --                 NeoTreeDirectoryName = { fg = palette.purple},
+    --                 NeoTreeRootName = { fg = neon_purple, bold = true },
+    --                 NeoTreeCursorLine = { bg = "#211b29", bold = true },
+    --                 TelescopeBorder = { fg = palette.bg4, bg = "NONE" },
+    --                 TelescopePromptBorder = { fg = palette.purple, bg = "NONE" },
+    --                 TelescopePromptTitle = { fg = palette.purple, bold = true },
+    --                 TelescopeResultsTitle = { fg = palette.bg4 },
+    --                 TelescopeSelection = { bg = "#2d2438", fg = palette.fg },
+    --
+    --                 SignColumn = { bg = "NONE" },
+    --                 GitSignsAdd = { fg = palette.purple },
+    --                 GitSignsChange = { fg = palette.bg4 },
+    --                 GitSignsDelete = { fg = palette.bg4 },
+    --                 TreesitterContext = { bg = "#211b29" },
+    --             }
+    --         end,
+    --     },
+    --     config = function(_, opts)
+    --         require("tokyodark").setup(opts)
+    --         vim.cmd.colorscheme("tokyodark")
+    --         vim.opt.cursorline = true
+    --     end,
+    -- },
     {
-        "tiagovla/tokyodark.nvim",
-        opts = {
-            custom_palette = function(palette)
-                local local_red = palette.red
-
-                return {
-                    orange = palette.fg,
-                    red    = palette.purple,
-                    purple = local_red,
-                    yellow = palette.cyan,
-                    green  = palette.blue,
-                }
-            end,
-
-            custom_highlights = function(_, palette)
-                return {
-                    -- variables
-                    ["@variable"] = { fg = palette.fg },
-                    ["@parameter"] = { fg = palette.fg },
-                    ["@lsp.type.variable"] = { fg = palette.fg },
-
-                    -- builtins
-                    ["@variable.builtin"] = { fg = palette.blue },
-                    ["@lsp.type.parameter"] = { fg = palette.cyan },
-
-                    -- punctuation
-                    ["@punctuation.delimiter"] = { fg = palette.bg4 },
-                    ["@punctuation.bracket"] = { fg = palette.bg4 },
-                    ["@punctuation.special"] = { fg = palette.blue },
-
-                    ["@operator"] = { fg = palette.bg4 }
-                }
-            end,
-        },
-        config = function(_, opts)
-            require("tokyodark").setup(opts)
-            vim.cmd.colorscheme("tokyodark")
+        "rockerBOO/boo-colorscheme-nvim",
+        lazy = false,
+        priority = 1000,
+        config = function()
+            vim.cmd([[colorscheme boo]])
         end,
-    }
-    ,
-    --Treesitter
+    },
     {
         "nvim-treesitter/nvim-treesitter",
         lazy = false,
@@ -86,13 +116,13 @@ return {
         dependencies = { 'nvim-tree/nvim-web-devicons' },
         config = function()
             local c = {
-                bg      = "#11121d",
-                fg      = "#a0a8cd",
-                normal  = "#a485dd",
-                insert  = "#7199ee",
-                visual  = "#ee6d85",
-                replace = "#38a89d",
-                grey    = "#4a5057",
+                bg      = "#222432",
+                fg      = "#a4aabd",
+                normal  = "#a2b5df",
+                insert  = "#9cd5c4",
+                visual  = "#d4a5b4",
+                replace = "#d4b595",
+                grey    = "#4f5467",
             }
 
             require('lualine').setup({
@@ -139,7 +169,6 @@ return {
             })
         end,
     },
-
     -- Telescope
     {
         "nvim-telescope/telescope.nvim",
@@ -198,8 +227,7 @@ return {
     {
         -- Core LSP config (starts language servers)
         "neovim/nvim-lspconfig",
-        event = "BufReadPre", --Before file is read into buffer.
-
+        event = { "BufReadPre", "BufNewFile" },
         dependencies = {
             -- Installs LSP servers
             { "williamboman/mason.nvim" },
@@ -221,9 +249,8 @@ return {
             -- Capabilities: tells LSP servers that nvim-cmp exists
             local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-            -- on_attach: runs when an LSP attaches to a buffer
             local on_attach = function(client, bufnr)
-                local opts = { buffer = bufnr, remap = false }
+                local opts = { buffer = bufnr }
                 local map = vim.keymap.set
 
                 -- Navigation
@@ -241,18 +268,7 @@ return {
                 -- Refactor
                 map("n", "<leader>rn", vim.lsp.buf.rename, opts)
                 map("n", "<leader>ca", vim.lsp.buf.code_action, opts)
-
-                -- Auto-format on save (only if server supports it)
-                if client.supports_method("textDocument/formatting") then
-                    vim.api.nvim_create_autocmd("BufWritePre", {
-                        buffer = bufnr,
-                        callback = function()
-                            vim.lsp.buf.format({ bufnr = bufnr })
-                        end,
-                    })
-                end
-            end
-            -- nvim-cmp setup (completion)
+            end            -- nvim-cmp setup (completion)
             local cmp = require("cmp")
 
             cmp.setup({
@@ -288,7 +304,6 @@ return {
 
             require("mason-lspconfig").setup({
                 ensure_installed = {
-                    "pyright",
                     "html",
                     "vtsls",
                 },
@@ -304,15 +319,8 @@ return {
             })
             local util = require("lspconfig.util")
             lspconfig.pyright.setup({
-                single_file_support = false,
-                root_dir = function(fname)
-                    return util.root_pattern(
-                        ".git",
-                        "pyproject.toml",
-                        "setup.py",
-                        "setup.cfg"
-                    )(fname)
-                end,
+                autostart = false,
+                capabilities = capabilities,
             })
             lspconfig.vtsls.setup({
                 on_attach = on_attach,
@@ -385,4 +393,45 @@ return {
                 lsp_doc_border = false,
             },
         },
-    }, }
+    },
+    {
+        "nvim-neo-tree/neo-tree.nvim",
+        branch = "v3.x",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "MunifTanjim/nui.nvim",
+        },
+        init = function()
+            vim.api.nvim_create_autocmd("VimEnter", {
+                callback = function()
+                    if vim.fn.argc() == 0 then
+                        require("neo-tree.command").execute({ action = "focus" })
+                    end
+                end,
+            })
+        end,
+        opts = {
+            hide_root_node = true,
+            retain_hidden_root_indent = true,
+            window = {
+                position = "left",
+                width = 30,
+            },
+            default_component_configs = {
+                icon = { folder_closed = "", folder_open = "", file = "" },
+                name = {
+                    use_git_status_colors = false,
+                    highlight_opened_files = true,
+                },
+            },
+            filesystem = {
+                renderers = {
+                    file = { { "indent" }, { "name" } },
+                    directory = { { "indent" }, { "name" } },
+                },
+                follow_current_file = { enabled = true },
+                use_libuv_file_watcher = true,
+            },
+        },
+    },
+}
