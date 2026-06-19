@@ -19,31 +19,24 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
+vim.api.nvim_create_autocmd("ColorScheme", {
+    pattern = "*",
+    callback = function()
+        local target_grey = "#e5e1f7"
 
-vim.api.nvim_create_autocmd("VimEnter", {
-  callback = function()
-    vim.defer_fn(function()
-      pcall(vim.cmd, "Noice dismiss")
-    end, 3000)
-  end,
-})
+        local groups_to_override = {
+            "@variable",
+            "@variable.builtin",
+            "@parameter",
+            "Identifier",
+            "markdownUrl",
+            "@markup.link.url"
+        }
 
-vim.api.nvim_create_autocmd("LspAttach", {
-  callback = function(args)
-    local bufnr = args.buf
-    local map = vim.keymap.set
-    local opts = { buffer = bufnr }
-
-    map("n", "gd", vim.lsp.buf.definition, opts)
-    map("n", "gD", vim.lsp.buf.declaration, opts)
-    map("n", "gi", vim.lsp.buf.implementation, opts)
-    map("n", "gr", vim.lsp.buf.references, opts)
-
-    map("n", "K", vim.lsp.buf.hover, opts)
-    map("n", "<leader>sd", vim.diagnostic.open_float, opts)
-    map("n", "<leader>rn", vim.lsp.buf.rename, opts)
-    map("n", "<leader>ca", vim.lsp.buf.code_action, opts)
-  end,
+        for _, group in ipairs(groups_to_override) do
+            vim.api.nvim_set_hl(0, group, { fg = target_grey })
+        end
+    end,
 })
 -- Plugins
 local plugins = require("plugins")

@@ -18,71 +18,6 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 return {
-    -- {
-    --     "tiagovla/tokyodark.nvim",
-    --     opts = {
-    --         custom_palette = function(palette)
-    --             return {
-    --                 orange = palette.fg,
-    --                 red    = palette.bg4,
-    --                 -- red = "#565f89",
-    --                 purple = palette.purple,
-    --                 yellow = palette.fg,
-    --                 green  = palette.purple,
-    --                 -- blue = "#565f89",
-    --                 -- cyan = "#565f89",
-    --             }
-    --         end,
-    --
-    --         custom_highlights = function(_, palette)
-    --             local neon_purple = "#b57cff"
-    --
-    --             return {
-    --                 ["@variable"] = { fg = palette.fg },
-    --                 ["@parameter"] = { fg = palette.fg },
-    --                 ["@lsp.type.variable"] = { fg = palette.fg },
-    --
-    --                 ["@variable.builtin"] = { fg = palette.purple },
-    --                 ["@lsp.type.parameter"] = { fg = palette.purple },
-    --
-    --                 ["@punctuation.delimiter"] = { fg = palette.bg4 },
-    --                 ["@punctuation.bracket"] = { fg = palette.bg4 },
-    --                 ["@punctuation.special"] = { fg = palette.bg4 },
-    --                 ["@operator"] = { fg = palette.bg4 },
-    --                 Comment = { fg = "#565f89", italic = true },
-    --                 ["@comment"] = { fg = "#565f89", italic = true },
-    --                 LineNr = { fg = palette.bg4 },
-    --                 CursorLineNr = { fg = neon_purple, bold = true },
-    --                 CursorLine = { bg = "#211b29" },
-    --                 Visual = { bg = "#2d2438" },
-    --                 WinSeparator = { fg = palette.bg4 },
-    --
-    --                 NeoTreeNormal = { bg = "NONE", fg = palette.fg },
-    --                 NeoTreeNormalNC = { bg = "NONE", fg = palette.fg },
-    --                 NeoTreeFileName = { fg = palette.fg },
-    --                 NeoTreeDirectoryName = { fg = palette.purple},
-    --                 NeoTreeRootName = { fg = neon_purple, bold = true },
-    --                 NeoTreeCursorLine = { bg = "#211b29", bold = true },
-    --                 TelescopeBorder = { fg = palette.bg4, bg = "NONE" },
-    --                 TelescopePromptBorder = { fg = palette.purple, bg = "NONE" },
-    --                 TelescopePromptTitle = { fg = palette.purple, bold = true },
-    --                 TelescopeResultsTitle = { fg = palette.bg4 },
-    --                 TelescopeSelection = { bg = "#2d2438", fg = palette.fg },
-    --
-    --                 SignColumn = { bg = "NONE" },
-    --                 GitSignsAdd = { fg = palette.purple },
-    --                 GitSignsChange = { fg = palette.bg4 },
-    --                 GitSignsDelete = { fg = palette.bg4 },
-    --                 TreesitterContext = { bg = "#211b29" },
-    --             }
-    --         end,
-    --     },
-    --     config = function(_, opts)
-    --         require("tokyodark").setup(opts)
-    --         vim.cmd.colorscheme("tokyodark")
-    --         vim.opt.cursorline = true
-    --     end,
-    -- },
     {
         "rockerBOO/boo-colorscheme-nvim",
         lazy = false,
@@ -225,73 +160,29 @@ return {
     },
 
     {
-        -- Core LSP config (starts language servers)
-        "neovim/nvim-lspconfig",
-        event = { "BufReadPre", "BufNewFile" },
+        "hrsh7th/nvim-cmp",
+        event = { "InsertEnter", "CmdlineEnter" },
         dependencies = {
-            -- Installs LSP servers
-            { "williamboman/mason.nvim" },
-
-            -- Bridges mason <-> lspconfig
-            { "williamboman/mason-lspconfig.nvim" },
-
-            { "hrsh7th/nvim-cmp" },
-            { "hrsh7th/cmp-nvim-lsp" },
-            { "hrsh7th/cmp-buffer" },
-            { "hrsh7th/cmp-path" },
-            { "hrsh7th/cmp-nvim-lua" },
+            "hrsh7th/cmp-nvim-lsp",
+            "hrsh7th/cmp-buffer",
+            "hrsh7th/cmp-path",
+            "hrsh7th/cmp-nvim-lua",
         },
-
         config = function()
-            -- Mason: installs LSP servers (does NOT start them)
-            require("mason").setup({})
-
-            -- Capabilities: tells LSP servers that nvim-cmp exists
-            local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
-            local on_attach = function(client, bufnr)
-                local opts = { buffer = bufnr }
-                local map = vim.keymap.set
-
-                -- Navigation
-                map("n", "gd", vim.lsp.buf.definition, opts)
-                map("n", "gD", vim.lsp.buf.declaration, opts)
-                map("n", "gi", vim.lsp.buf.implementation, opts)
-                map("n", "gr", vim.lsp.buf.references, opts)
-
-                -- Docs
-                map("n", "K", vim.lsp.buf.hover, opts)
-
-                -- Diagnostics
-                map("n", "<leader>sd", vim.diagnostic.open_float, opts)
-
-                -- Refactor
-                map("n", "<leader>rn", vim.lsp.buf.rename, opts)
-                map("n", "<leader>ca", vim.lsp.buf.code_action, opts)
-            end            -- nvim-cmp setup (completion)
             local cmp = require("cmp")
 
             cmp.setup({
                 mapping = {
                     ["<Tab>"] = cmp.mapping(function(fallback)
-                        if cmp.visible() then
-                            cmp.select_next_item()
-                        else
-                            fallback()
-                        end
+                        if cmp.visible() then cmp.select_next_item()
+                        else fallback() end
                     end, { "i", "s" }),
-
                     ["<S-Tab>"] = cmp.mapping(function(fallback)
-                        if cmp.visible() then
-                            cmp.select_prev_item()
-                        else
-                            fallback()
-                        end
+                        if cmp.visible() then cmp.select_prev_item()
+                        else fallback() end
                     end, { "i", "s" }),
-
                     ["<CR>"] = cmp.mapping.confirm({ select = true }),
                 },
-
                 sources = {
                     { name = "nvim_lsp" },
                     { name = "luasnip" },
@@ -300,44 +191,52 @@ return {
                 },
             })
 
-            local lspconfig = require("lspconfig")
-
-            require("mason-lspconfig").setup({
-                ensure_installed = {
-                    "html",
-                    "vtsls",
-                },
-                -- handlers = {
-                --
-                --     function(server)
-                --         lspconfig[server].setup({
-                --             on_attach = on_attach,
-                --             capabilities = capabilities,
-                --         })
-                --     end,
-                -- },
-            })
-            local util = require("lspconfig.util")
-            lspconfig.pyright.setup({
-                autostart = false,
-                capabilities = capabilities,
-            })
-            lspconfig.vtsls.setup({
-                on_attach = on_attach,
-                capabilities = capabilities,
+            vim.lsp.config('vtsls', {
+                cmd = { "vtsls", "--stdio" },
+                root_markers = { "package.json", "tsconfig.json" },
+                filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
             })
 
-            lspconfig.lua_ls.setup({
-                --This allows lua-language-server to attach if ':LspStart lua_ls' is called.
+            vim.lsp.config('lua_ls', {
                 cmd = { "lua-language-server" },
-                on_attach = on_attach,
-                capabilities = capabilities,
+                root_markers = { ".luarc.json", "init.lua" },
+                filetypes = { "lua" },
             })
 
-            lspconfig.clangd.setup({
+            vim.lsp.config('clangd', {
                 cmd = { "clangd" },
-                on_attach = on_attach,
-                capabilities = capabilities,
+                root_markers = { "compile_commands.json", "compile_flags.txt" },
+                filetypes = { "c", "cpp" },
+            })
+
+            vim.lsp.config('pyright', {
+                cmd = { "pyright-langserver", "--stdio" },
+                root_markers = { "pyproject.toml", "setup.py", "requirements.txt" },
+                filetypes = { "python" },
+            })
+            vim.lsp.enable('vtsls')
+            vim.lsp.enable('lua_ls')
+            vim.lsp.enable('clangd')
+            vim.lsp.enable('pyright')
+
+            vim.api.nvim_create_autocmd('LspAttach', {
+                desc = 'LSP actions',
+                callback = function(event)
+                    local opts = { buffer = event.buf }
+                    local map = vim.keymap.set
+
+                    map("n", "gd", vim.lsp.buf.definition, opts)
+                    map("n", "gD", vim.lsp.buf.declaration, opts)
+                    map("n", "gi", vim.lsp.buf.implementation, opts)
+                    map("n", "gr", vim.lsp.buf.references, opts)
+
+                    map("n", "K", vim.lsp.buf.hover, opts)
+
+                    map("n", "<leader>sd", vim.diagnostic.open_float, opts)
+
+                    map("n", "<leader>rn", vim.lsp.buf.rename, opts)
+                    map("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+                end,
             })
         end,
     },
