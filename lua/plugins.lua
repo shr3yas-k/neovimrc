@@ -271,7 +271,14 @@ return {
         event = "VeryLazy",
         dependencies = {
             "MunifTanjim/nui.nvim",
-            "rcarriga/nvim-notify",
+            {
+                -- https://www.reddit.com/r/neovim/comments/11iuona/nvimnotify_highlight_groups_startup_notification/
+                -- fixes Highlight group 'Notifybackground' has no background highlight issue.
+                "rcarriga/nvim-notify",
+                opts = {
+                    background_colour = "#000000",
+                },
+            },
         },
         opts = {
             notify = {
