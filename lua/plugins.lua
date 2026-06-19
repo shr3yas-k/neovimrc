@@ -300,6 +300,9 @@ return {
             "nvim-lua/plenary.nvim",
             "MunifTanjim/nui.nvim",
         },
+        keys = {
+            { "<leader>nt", "<cmd>Neotree toggle<cr>", desc = "Toggle Neo-tree" },
+        },
         init = function()
             vim.api.nvim_create_autocmd("VimEnter", {
                 callback = function()
@@ -324,6 +327,11 @@ return {
                 },
             },
             filesystem = {
+                filtered_items = {
+                    visible = true,
+                    hide_dotfiles = false,
+                    hide_hidden = false,
+                },
                 renderers = {
                     file = { { "indent" }, { "name" } },
                     directory = { { "indent" }, { "name" } },
