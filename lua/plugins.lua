@@ -170,7 +170,7 @@ return {
         },
         config = function()
             local cmp = require("cmp")
-
+            local capabilities = require('cmp_nvim_lsp').default_capabilities()
             cmp.setup({
                 mapping = {
                     ["<Tab>"] = cmp.mapping(function(fallback)
@@ -195,24 +195,28 @@ return {
                 cmd = { "vtsls", "--stdio" },
                 root_markers = { "package.json", "tsconfig.json" },
                 filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+                capabilities = capabilities,
             })
 
             vim.lsp.config('lua_ls', {
                 cmd = { "lua-language-server" },
                 root_markers = { ".luarc.json", "init.lua" },
                 filetypes = { "lua" },
+                capabilities = capabilities,
             })
 
             vim.lsp.config('clangd', {
                 cmd = { "clangd" },
                 root_markers = { "compile_commands.json", "compile_flags.txt" },
                 filetypes = { "c", "cpp" },
+                capabilities = capabilities,
             })
 
             vim.lsp.config('pyright', {
                 cmd = { "pyright-langserver", "--stdio" },
                 root_markers = { "pyproject.toml", "setup.py", "requirements.txt" },
                 filetypes = { "python" },
+                capabilities = capabilities,
             })
             vim.lsp.enable('vtsls')
             vim.lsp.enable('lua_ls')
