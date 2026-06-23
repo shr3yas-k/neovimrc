@@ -218,10 +218,19 @@ return {
                 filetypes = { "python" },
                 capabilities = capabilities,
             })
+
+            vim.lsp.config('nil', {
+                cmd = { "nil" },
+                root_markers = { "flake.nix", "configuration.nix" },
+                filetypes = { "nix" },
+                capabilities = capabilities,
+            })
+
             vim.lsp.enable('vtsls')
             vim.lsp.enable('lua_ls')
             vim.lsp.enable('clangd')
             vim.lsp.enable('pyright')
+            vim.lsp.enable('nil')
 
             vim.api.nvim_create_autocmd('LspAttach', {
                 desc = 'LSP actions',
