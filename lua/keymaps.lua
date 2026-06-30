@@ -38,3 +38,7 @@ vim.keymap.set("n", "<leader>r", function()
         vim.fn.chansend(vim.b.terminal_job_id, cmd)
     end, 100)
 end)
+
+-- Enters start of next block instead of exactly moving down/up.
+vim.keymap.set('n', 'j', 'j^', { noremap = true, silent = true })
+vim.keymap.set('n', 'k', 'k^', { noremap = true, silent = true })
