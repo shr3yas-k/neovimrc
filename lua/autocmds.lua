@@ -7,22 +7,25 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
--- Override cyan from the boo-colorscheme
-vim.api.nvim_create_autocmd("ColorScheme", {
-    pattern = "*",
+vim.api.nvim_create_autocmd("VimEnter", {
     callback = function()
-        local target_grey = "#e5e1f7"
-        local groups_to_override = {
-            "@variable",
-            "@variable.builtin",
-            "@parameter",
-            "Identifier",
-            "markdownUrl",
-            "@markup.link.url"
-        }
-
-        for _, group in ipairs(groups_to_override) do
-            vim.api.nvim_set_hl(0, group, { fg = target_grey })
+        if vim.fn.isdirectory(vim.fn.argv(0) or "") == 1 then
+            vim.cmd("cd " .. vim.fn.argv(0))
+            local alpha = require("alpha")
+            alpha.start(false)
         end
+    end,
+})
+
+-- laststatus = 3 => show (bottom status bar - wrapped by lualine)
+-- laststatus = 0 => hide
+vim.api.nvim_create_autocmd("User", {
+    pattern = "AlphaReady",
+    callback = function()
+        vim.opt.laststatus = 0
+        vim.api.nvim_create_autocmd("BufUnload", {
+            buffer = 0,
+            callback = function() vim.opt.laststatus = 3 end,
+        })
     end,
 })
