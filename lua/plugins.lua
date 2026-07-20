@@ -1,6 +1,3 @@
-vim.opt.number = true
-
-vim.opt.relativenumber = true
 -- Setup lazy.nvim path
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -234,9 +231,21 @@ return {
         })
     end,
 },
+
 {
-    "numToStr/Comment.nvim",
-    opts = {}
+    'nvim-mini/mini.comment',
+    version = '*',
+    options = {
+        -- Whether to ignore blank lines when commenting
+        ignore_blank_line = false,
+    },
+
+    mappings = {
+        comment = 'gc',
+        comment_line = 'gcc',
+        comment_visual = 'gc',
+        textobject = 'gc',
+    },
 },
 
 {
@@ -358,7 +367,7 @@ return {
 
         dashboard.section.buttons.val = {
             button("f", icons.files    .. " Find File",   "<cmd>Telescope find_files<cr>"),
-            button("n", icons.new_file .. " New File",    "<cmd>ene | startinsert<cr>"),
+            button("n", icons.new_file .. " New File", "<cmd>execute 'edit ' . input('New File: ')<cr>"),
             button("r", icons.restore  .. " Recent Files", "<cmd>Telescope oldfiles<cr>"),
             button("g", icons.text     .. " Find Text",   "<cmd>Telescope live_grep<cr>"),
             button("c", icons.config   .. " Config",      "<cmd>e ~/.config/nvim/ | cd %:p:h<cr>"),
