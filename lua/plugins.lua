@@ -311,7 +311,7 @@ return {
         "MunifTanjim/nui.nvim",
     },
     keys = {
-        { "<leader>nt", "<cmd>Neotree toggle<cr>", desc = "Toggle Neo-tree" },
+        { "<leader>nt", "<cmd>Neotree toggle position=float<cr>", desc = "Toggle Neo-tree" },
     },
     opts = {
         hide_root_node = true,
