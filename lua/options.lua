@@ -17,4 +17,5 @@ vim.api.nvim_set_hl(0, "CursorLine", {
 vim.opt.number = true
 vim.opt.relativenumber = true
 
-
+-- Fixes glitches which happen otherwise.
+vim.opt.wrap = false
